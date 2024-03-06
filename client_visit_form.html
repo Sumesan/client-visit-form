@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Visit Information</title>
+</head>
+<body>
+    <h1>Client Visit Information Form</h1>
+    <form id="registrationForm" action="https://formspree.io/f/xdoqdkgp" method="POST">
+        <h2>Business Information</h2>
+        <label for="outworx_contact">Outworx Point of Contact:</label><br>
+        <p><em>Name of the person from Outworx that you are in regular contact with</em></p>
+        <input type="text" id="outworx_contact" name="outworx_contact" required><br><br>
+
+        <label for="campaign">Campaign:</label><br>
+        <input type="text" id="campaign" name="campaign" required><br>
+        <label for="num_guests">Number of Guests:</label><br>
+        <select id="num_guests" name="num_guests" required onchange="generateGuestFields()">
+            <option value="">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select><br><br>
+
+        <div id="guestFieldsContainer"></div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function generateGuestFields() {
+            var numGuests = document.getElementById("num_guests").value;
+            var guestFieldsContainer = document.getElementById("guestFieldsContainer");
+            guestFieldsContainer.innerHTML = ""; // Clear previous fields
+
+            for (var i = 1; i <= numGuests; i++) {
+                var guestDiv = document.createElement("div");
+                guestDiv.innerHTML = `
+                    <h2>Guest ${i} Information</h2>
+                    <label for="guest_name_${i}">Guest Name:</label><br>
+                    <input type="text" id="guest_name_${i}" name="guest_name_${i}" required><br>
+                    <label for="guest_mobile_${i}">Guest Mobile Number:</label><br>
+                    <input type="tel" id="guest_mobile_${i}" name="guest_mobile_${i}" pattern="[0-9]{10}" required><br>
+                    <label for="sa_phone_${i}">Does the guest require a South African phone?</label><br>
+                    <input type="checkbox" id="sa_phone_${i}" name="sa_phone_${i}"><br>
+                    <label for="arrival_flight_${i}">Arrival Flight Number:</label><br>
+                    <input type="text" id="arrival_flight_${i}" name="arrival_flight_${i}"><br>
+                    <label for="arrival_date_${i}">Date of Flight Arrival:</label><br>
+                    <input type="date" id="arrival_date_${i}" name="arrival_date_${i}"><br>
+                    <label for="departure_flight_${i}">Departure Flight Number:</label><br>
+                    <input type="text" id="departure_flight_${i}" name="departure_flight_${i}"><br>
+                    <label for="departure_date_${i}">Date of Flight Departure:</label><br>
+                    <input type="date" id="departure_date_${i}" name="departure_date_${i}"><br>
+                    <label for="hotel_${i}">Name of the Hotel:</label><br>
+                    <input type="text" id="hotel_${i}" name="hotel_${i}"><br>
+                    <label for="special_requirements_${i}">Special Requirements:</label><br>
+                    <textarea id="special_requirements_${i}" name="special_requirements_${i}" rows="4"></textarea><br><br>
+                `;
+                guestFieldsContainer.appendChild(guestDiv);
+            }
+        }
+    </script>
+</body>
+</html>

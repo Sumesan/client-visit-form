@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Visit Information</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="https://www.outworx.co.za/wp-content/uploads/2022/08/Outworx_Logo_Main.png" alt="Outworx Logo">
+        <h1>Client Visit Information Form</h1>
+        <form id="registrationForm" action="https://formspree.io/f/xdoqdkgp" method="POST">
+            <div class="form-group">
+                <label for="outworx_contact">Outworx Point of Contact:</label>
+                <input type="text" id="outworx_contact" name="outworx_contact" required>
+            </div>
+
+            <div class="form-group">
+                <label for="campaign">Campaign:</label>
+                <input type="text" id="campaign" name="campaign" required>
+            </div>
+
+            <div class="form-group">
+                <label for="num_guests">Number of Guests:</label>
+                <select id="num_guests" name="num_guests" required onchange="generateGuestFields()">
+                    <option value="">Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+
+            <div id="guestFieldsContainer"></div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function generateGuestFields() {
+            var numGuests = document.getElementById("num_guests").value;
+            var guestFieldsContainer = document.getElementById("guestFieldsContainer");
+            guestFieldsContainer.innerHTML = ""; // Clear previous fields
+
+            for (var i = 1; i <= numGuests; i++) {
+                var guestDiv = document.createElement("div");
+                guestDiv.innerHTML = `
+                    <div class="guest-section">
+                        <h2>Guest ${i} Information</h2>
+                        <div class="form-group">
+                            <label for="guest_name_${i}">Guest Name:</label>
+                            <input type="text" id="guest_name_${i}" name="guest_name_${i}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guest_mobile_${i}">Guest Mobile Number:</label>
+                            <input type="tel" id="guest_mobile_${i}" name="guest_mobile_${i}" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sa_phone_${i}">Does the guest require a South African phone?</label>
+                            <input type="checkbox" id="sa_phone_${i}" name="sa_phone_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival_flight_${i}">Arrival Flight Number:</label>
+                            <input type="text" id="arrival_flight_${i}" name="arrival_flight_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival_date_${i}">Date of Flight Arrival:</label>
+                            <input type="date" id="arrival_date_${i}" name="arrival_date_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="departure_flight_${i}">Departure Flight Number:</label>
+                            <input type="text" id="departure_flight_${i}" name="departure_flight_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="departure_date_${i}">Date of Flight Departure:</label>
+                            <input type="date" id="departure_date_${i}" name="departure_date_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="hotel_${i}">Name of the Hotel:</label>
+                            <input type="text" id="hotel_${i}" name="hotel_${i}">
+                        </div>
+                        <div class="form-group">
+                            <label for="special_requirements_${i}">Special Requirements:</label>
+                            <textarea id="special_requirements_${i}" name="special_requirements_${i}" rows="4"></textarea>
+                        </div>
+                    </div>
+                `;
+                guestFieldsContainer.appendChild(guestDiv);
+            }
+        }
+    </script>
+</body>
+</html>

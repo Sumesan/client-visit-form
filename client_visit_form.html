@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Visit Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            max-width: 200px;
+            display: block;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .checkbox-container input[type="checkbox"],
+        .checkbox-container label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="https://www.outworx.co.za/wp-content/uploads/2022/08/Outworx_Logo_Main.png" alt="Outworx Logo">
+        <h1>Client Visit Information Form</h1>
+        <form id="registrationForm" action="https://formspree.io/f/xdoqdkgp" method="POST">
+            <div class="form-group">
+                <label for="outworx_contact">Outworx Point of Contact</label>
+                <span class="subtitle">(The person's name from Outworx that you are in regular contact with)</span>
+                <input type="text" id="outworx_contact" name="Outworx Point of Contact" required>
+            </div>
+
+            <div class="form-group">
+                <label for="campaign">Campaign:</label>
+                <input type="text" id="campaign" name="Campaign" required>
+            </div>
+
+            <div class="form-group">
+                <label for="num_guests">Number of Guests:</label>
+                <select id="num_guests" name="Number of Guests" required onchange="generateGuestFields()">
+                    <option value="">Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+
+            <div id="guestFieldsContainer"></div>
+
+            <button type="button" id="nextButton" onclick="nextGuest()">Next</button>
+            <button type="submit" id="submitButton" style="display: none;">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        var currentGuest = 1;
+        var numGuests = 0;
+
+        function generateGuestFields() {
+            numGuests = parseInt(document.getElementById("num_guests").value);
+            currentGuest = 1; // Reset current guest
+            showGuestFields(currentGuest);
+        }
+
+        function showGuestFields(guestNumber) {
+            var guestFieldsContainer = document.getElementById("guestFieldsContainer");
+            guestFieldsContainer.innerHTML = ""; // Clear previous fields
+
+            var guestDiv = document.createElement("div");
+            guestDiv.innerHTML = `
+                <div class="guest-section">
+                    <h2>Guest ${guestNumber} Information</h2>
+                    <div class="form-group">
+                        <label for="guest_name_${guestNumber}">Guest Name (${guestNumber}):</label>
+                        <input type="text" id="guest_name_${guestNumber}" name="Guest Name (${guestNumber})" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guest_mobile_${guestNumber}">Guest Mobile Number (${guestNumber}):</label>
+                        <div style="display: flex;">
+                            <select id="country_code_${guestNumber}" name="Country Code (${guestNumber})" style="width: 30%;">
+                                <option value="1">+1 (USA)</option>
+                                <option value="44">+44 (UK)</option>
+                                <option value="27">+27 (SA)</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                            <input type="tel" id="guest_mobile_${guestNumber}" name="Guest Mobile Number (${guestNumber})" pattern="[0-9]{10}" style="width: 70%;" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sa_phone_${guestNumber}">Does the guest require a South African phone? (${guestNumber}):</label>
+                        <select id="sa_phone_${guestNumber}" name="Does the guest require a South African phone? (${guestNumber})">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrival_flight_${guestNumber}">Arrival Flight Number (${guestNumber}):</label>
+                        <input type="text" id="arrival_flight_${guestNumber}" name="Arrival Flight Number (${guestNumber})">
+                    </div>
+                    <div class="form-group">
+                        <label for="arrival_date_${guestNumber}">Date of Flight Arrival (${guestNumber}):</label>
+                        <input type="date" id="arrival_date_${guestNumber}" name="Date of Flight Arrival (${guestNumber})">
+                    </div>
+                    <div class="form-group">
+                        <label for="departure_flight_${guestNumber}">Departure Flight Number (${guestNumber}):</label>
+                        <input type="text" id="departure_flight_${guestNumber}" name="Departure Flight Number (${guestNumber})">
+                    </div>
+                    <div class="form-group">
+                        <label for="departure_date_${guestNumber}">Date of Flight Departure (${guestNumber}):</label>
+                        <input type="date" id="departure_date_${guestNumber}" name="Date of Flight Departure (${guestNumber})">
+                    </div>
+                    <div class="form-group">
+                        <label for="hotel_${guestNumber}">Name of the Hotel (${guestNumber}):</label>
+                        <input type="text" id="hotel_${guestNumber}" name="Name of the Hotel (${guestNumber})">
+                    </div>
+                    <div class="form-group">
+                        <label for="special_requirements_${guestNumber}">Special Requirements (${guestNumber}):</label>
+                        <textarea id="special_requirements_${guestNumber}" name="Special Requirements (${guestNumber})" rows="4"></textarea>
+                        
+                        <label for="activities_interested_${guestNumber}">Activities Interested In (${guestNumber}):</label><br>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="activity_ushaka_${guestNumber}" name="Activities Interested In (${guestNumber})[]" value="Ushaka Marine World (Shark Cage Diving/Snorkeling)">
+                            <label for="activity_ushaka_${guestNumber}">Ushaka Marine World (Shark Cage Diving/Snorkeling)</label>
+
+                            <input type="checkbox" id="activity_zulu_${guestNumber}" name="Activities Interested In (${guestNumber})[]" value="Zulu Kingdom Tour">
+                            <label for="activity_zulu_${guestNumber}">Zulu Kingdom Tour</label>
+
+                            <input type="checkbox" id="activity_segway_${guestNumber}" name="Activities Interested In (${guestNumber})[]" value="Segway Tour">
+                            <label for="activity_segway_${guestNumber}">Segway Tour</label>
+
+                            <input type="checkbox" id="activity_safari_${guestNumber}" name="Activities Interested In (${guestNumber})[]" value="Safari Tour">
+                            <label for="activity_safari_${guestNumber}">Safari Tour</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            guestFieldsContainer.appendChild(guestDiv);
+
+            // Show/hide buttons based on current guest
+            if (guestNumber === numGuests) {
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "block";
+            } else {
+                document.getElementById("nextButton").style.display = "block";
+                document.getElementById("submitButton").style.display = "none";
+            }
+        }
+
+        function nextGuest() {
+            if (currentGuest < numGuests) {
+                currentGuest++;
+                showGuestFields(currentGuest);
+            }
+        }
+    </script>
+</body>
+</html>
